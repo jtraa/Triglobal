@@ -17,23 +17,20 @@ include_once 'config/database.php';
             //Query 0: alle countries
             $query="SELECT * from countries";
             $db_result = $conn->query($query);
-            //Alle countries ophalen en doorheen loopen
-            //table openen
            
             foreach ($db_result as $country){
                 echo "<table>";
                 echo "<tr>";
                 echo "<td>Country Name</td>";
                 echo "<td>" .$country['country_name']. "</td>";
-                echo "</tr> <br>";
-            }
+                echo "</tr>";
+            
                 //Query 1: Het land van de loop, count op aantal import
                 $query2 = 
                "SELECT COUNT(requests.country_from) as count_country_from
                 FROM requests
-                INNER JOIN countries
-                ON countries.country_code = requests.country_from
-                GROUP BY requests.country_from";
+                WHERE country_from = '".$country['country_code']."'";
+                
 
                 $db_result = $conn->query($query2);
 
@@ -41,16 +38,14 @@ include_once 'config/database.php';
                     echo "<tr>";
                     echo "<td>Export-count</td>";
                     echo "<td> " .$row['count_country_from']. "</td>";
-                    echo "</tr> <br>";
+                    echo "</tr>";
                               
                 }
                 //Query 2: Het land van de loop, count op aantal export
                 $query3 = 
                 "SELECT COUNT(requests.country_to) as count_country_to
                  FROM requests
-                 INNER JOIN countries
-                 ON countries.country_code = requests.country_to
-                 GROUP BY requests.country_to";
+                WHERE country_to = '".$country['country_code']."'";
  
                  $db_result = $conn->query($query3);
  
@@ -62,13 +57,8 @@ include_once 'config/database.php';
                                
                      echo "</table>";
                  }
-
-
-               
-            
-            
-            
-         
+                }
+                
             ?>
             </div>
     </center>
