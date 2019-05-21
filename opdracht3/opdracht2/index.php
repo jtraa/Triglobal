@@ -19,11 +19,8 @@ include_once 'config/database.php';
             $db_result = $conn->query($query);
            
             foreach ($db_result as $country){
-                echo "<table>";
-                echo "<tr>";
-                echo "<td>Country Name</td>";
-                echo "<td>" .$country['country_name']. "</td>";
-                echo "</tr>";
+                echo "['" .$country['country_name']. "',";
+               
             
                 //Query 1: Het land van de loop, count op aantal import
                 $query2 = 
@@ -35,11 +32,7 @@ include_once 'config/database.php';
                 $db_result = $conn->query($query2);
 
                 foreach ($db_result as $row){
-                    echo "<tr>";
-                    echo "<td>Export-count</td>";
-                    echo "<td> " .$row['count_country_from']. "</td>";
-                    echo "</tr>";
-                              
+                    echo " ".$row['count_country_from']. ",";                     
                 }
                 //Query 2: Het land van de loop, count op aantal export
                 $query3 = 
@@ -50,11 +43,9 @@ include_once 'config/database.php';
                  $db_result = $conn->query($query3);
  
                  foreach ($db_result as $row){
-                     echo "<tr>";
-                     echo "<td>Import-count</td>";
-                     echo "<td> " .$row['count_country_to']. "</td>";
-                     echo "</tr> <br>";                   
-                     echo "</table>";
+                    
+                     echo " " .$row['count_country_to']. "],";
+                     echo "<br>";
                  }
             }
 

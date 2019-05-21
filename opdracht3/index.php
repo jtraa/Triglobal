@@ -1,5 +1,49 @@
 <?php
 include_once 'config/database.php';
+
+//Query 0: alle countries
+$query="SELECT * from countries";
+$db_result = $conn->query($query);
+
+foreach ($db_result as $country){
+    echo "<table>";
+    echo "<tr>";
+    echo "<td>Country Name</td>";
+    echo "<td>" .$country['country_name']. "</td>";
+    echo "</tr>";
+
+    //Query 1: Het land van de loop, count op aantal import
+    $query2 = 
+   "SELECT COUNT(requests.country_from) as count_country_from
+    FROM requests
+    WHERE country_from = '".$country['country_code']."'";
+    
+
+    $db_result = $conn->query($query2);
+
+    foreach ($db_result as $row){
+        echo "<tr>";
+        echo "<td>Export-count</td>";
+        echo "<td> " .$row['count_country_from']. "</td>";
+        echo "</tr>";
+                  
+    }
+    //Query 2: Het land van de loop, count op aantal export
+    $query3 = 
+    "SELECT COUNT(requests.country_to) as count_country_to
+     FROM requests
+    WHERE country_to = '".$country['country_code']."'";
+
+     $db_result = $conn->query($query3);
+
+     foreach ($db_result as $row){
+         echo "<tr>";
+         echo "<td>Import-count</td>";
+         echo "<td> " .$row['count_country_to']. "</td>";
+         echo "</tr> <br>";                   
+         echo "</table>";
+     }
+}?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +84,7 @@ include_once 'config/database.php';
         const options = {
           mapsOptions: {
             center: {lat: -22.15, lng: -42.9},
-            zoom: 10
+            zoom: 7
           },
           geoJson: "https://cdn.rawgit.com/rarylson/geochart-geojson/master/example/rio-state.geojson",
           geoJsonOptions: {
@@ -55,10 +99,11 @@ include_once 'config/database.php';
   </head>
 
   <body>
-    <div id="mydiv" style="width: 100%; height: 2000px;"></div>
+    <div id="mydiv" style="width: 97vw; height: 90vh;"></div>
+        
   </body>
            
-    </center>
+    
 
     <script src="app.js"></script>
 </body>
