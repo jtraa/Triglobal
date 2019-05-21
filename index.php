@@ -11,12 +11,27 @@ include_once 'config/database.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" />
 </head>
 <body>
-    <div class="container">
-        <button id="button">Get Data</button>
-        <br><br>
-        <div id="output"></div>
-    </div>
+    <center>
+        <div class="container">
+            <a href="index.php" class="button">Randomize</a><br><br>
+            <?php
 
+               $query = 
+               "SELECT * FROM requests  
+               ORDER BY RAND ( )  
+               LIMIT 1";
+
+                $db_result = $conn->query($query);
+
+                foreach ($db_result as $row){
+                    echo "Aanvraag met nummer " .$row['id']. " verhuisd naar " 
+                    .$row['country_from']. " naar " .$row['country_to'];  
+                }
+            
+                $conn = null;
+        
+            ?>
+    </center>
 
     <script src="app.js"></script>
 </body>
