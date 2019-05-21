@@ -14,45 +14,63 @@ include_once 'config/database.php';
     <center>
         <div class="container">
             <?php
-
-               $query = 
-            //    "SELECT COUNT(requests.country_from) as count_country_from
-            //    , COUNT(requests.country_to) as count_country_to
-            //     FROM requests
-            //     INNER JOIN countries
-            //     on countries.country_code = requests.country_from";
-
-            "SELECT * FROM requests
-                 INNER JOIN countries on COUNT(requests.country_from) as num_of_countries where (countries.country_code = requests.country_from)
-                 ,COUNT(requests.country_to) as export_of_countries where (countries.code = requests.country_to)";
-                
-                $db_result = $conn->query($query);
-
-                foreach ($db_result as $row){
-                echo "<table class='table'>";
-
+            //Query 0: alle countries
+            $query="SELECT * from countries";
+            $db_result = $conn->query($query);
+            //Alle countries ophalen en doorheen loopen
+            //table openen
+           
+            foreach ($db_result as $country){
+                echo "<table>";
                 echo "<tr>";
                 echo "<td>Country Name</td>";
-                echo "<td>" .$row['country_name']. "</td>";
+                echo "<td>" .$country['country_name']. "</td>";
                 echo "</tr> <br>";
- 
-                echo "<tr>";
-                    echo "<td>Count Import</td>";
-                    echo "<td> " .$row['num_of_countries']. "</td>";
-                echo "</tr> <br>";
+            }
+                //Query 1: Het land van de loop, count op aantal import
+                $query2 = 
+               "SELECT COUNT(requests.country_from) as count_country_from
+                FROM requests
+                INNER JOIN countries
+                ON countries.country_code = requests.country_from
+                GROUP BY requests.country_from";
 
-                echo "<tr>";
-                    echo "<td>Count Export</td>";
-                    echo "<td> " .$row['export_of_countries']. "</td>";
-                echo "</tr> <br>";
+                $db_result = $conn->query($query2);
 
-
-                echo  "</table>";
+                foreach ($db_result as $row){
+                    echo "<tr>";
+                    echo "<td>Export-count</td>";
+                    echo "<td> " .$row['count_country_from']. "</td>";
+                    echo "</tr> <br>";
+                              
                 }
+                //Query 2: Het land van de loop, count op aantal export
+                $query3 = 
+                "SELECT COUNT(requests.country_to) as count_country_to
+                 FROM requests
+                 INNER JOIN countries
+                 ON countries.country_code = requests.country_to
+                 GROUP BY requests.country_to";
+ 
+                 $db_result = $conn->query($query3);
+ 
+                 foreach ($db_result as $row){
+                     echo "<tr>";
+                     echo "<td>Import-count</td>";
+                     echo "<td> " .$row['count_country_to']. "</td>";
+                     echo "</tr> <br>";
+                               
+                     echo "</table>";
+                 }
+
+
+               
             
-                $conn = null;
-        
+            
+            
+         
             ?>
+            </div>
     </center>
 
     <script src="app.js"></script>
